@@ -1,6 +1,9 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, create_engine
 from sqlalchemy.orm import relationship 
 from sqlalchemy.ext.declarative import declarative_base
+
+
+engine = create_engine('sqlite:///models.db')
 
 Base= declarative_base
 class Restaurant (Base):
@@ -10,12 +13,26 @@ class Restaurant (Base):
     price = Column(Integer)
     reviews = relationship('Review')
 
+    def reviews(self):
+        return self.reviews
+    
+    def customers(self):
+        return self.customers
+
 class Customer(Base):
     __tablename__='customers'
     id= Column(Integer, primary_key=True)
     first_name= Column(String)
     last_name= Column(String)
     reviews=relationship('Review')
+
+    def reviews(self):
+        return self.reviews
+    
+    def restaurants(self):
+        return self.restaurants
+    
+    
 class Review(Base):
     __tablename__='reviews'
     id= Column(Integer, primary_key=True)
@@ -24,3 +41,9 @@ class Review(Base):
     customer_id=Column(Integer, ForeignKey('customers.id'))
     restaurant = relationship('Restaurant')
     customer= relationship('Customer')
+
+    def customer(self):
+        return self.customer
+    
+    def restaurant(self):
+        return self.restaurant

@@ -32,6 +32,11 @@ class Customer(Base):
     def restaurants(self):
         return self.restaurants
     
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}"
+    def favorite_restaurant(self):
+        top_rating = max(review.star_rating for review in self.reviews)
+        return next((review.restaurant for review in self.reviews if review.star_rating == top_rating), None)
     
 class Review(Base):
     __tablename__='reviews'
